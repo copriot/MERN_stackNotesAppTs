@@ -6,10 +6,14 @@ const notSchema = Schema(
   {
     title: {
       type: String,
-      required: true,
+      required: [true, "Note title is required"],
     },
     description: {
       type: String,
+    },
+    user_id: {
+      type: String,
+      required: [true, "User id is required"],
     },
   },
   {

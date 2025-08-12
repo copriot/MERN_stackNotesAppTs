@@ -1,8 +1,13 @@
 const express = require("express");
 require("dotenv").config();
 const notesRoute = require("./routes/notes");
+const userRoute = require("./routes/user");
+const cors = require("cors");
 const mongoose = require("mongoose");
+
 const app = express();
+
+app.use(cors());
 PORT = process.env.PORT;
 
 app.use((req, res, next) => {
@@ -24,3 +29,4 @@ mongoose
     console.log(err);
   });
 app.use("/api/notes", notesRoute);
+app.use("/api/user", userRoute);

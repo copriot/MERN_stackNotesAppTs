@@ -1,10 +1,18 @@
 const NoteModel = require("../models/noteModel");
 const mongoose = require("mongoose");
+
 const createNote = async (req, res) => {
   const { title, description } = req.body;
 
+  let emptyFields = [];
+  if (!title) emptyFields.push("title");
+  if (emptyFields.length > 0) {
+    return res.status(400).json({ error: "Please fill the title field", emptyFields });
+  }
+
   try {
-    const not = await NoteModel.create({ title, description });
+    const user_id = req.user._id;
+    const not = await NoteModel.create({ title, description, user_id });
     res.status(200).json(not);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -12,7 +20,8 @@ const createNote = async (req, res) => {
 };
 
 const getAllNotes = async (req, res) => {
-  const notes = await NoteModel.find().sort({ createdAt: -1 });
+  const user_id = req.user._id;
+  const notes = await NoteModel.find({ user_id }).sort({ createdAt: -1 });
   res.status(200).json(notes);
 };
 
